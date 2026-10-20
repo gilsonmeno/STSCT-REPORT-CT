@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="pt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Relatórios da Central</title>
+<style>
+:root{--ink:#172b32;--muted:#61747a;--line:#dce6e4;--paper:#fff;--canvas:#f1f6f4;--teal:#0a766e;--teal-dark:#075950;--teal-soft:#e3f2ef;--red:#a43838;--shadow:0 14px 36px rgba(18,51,48,.08)}
+*{box-sizing:border-box}body{margin:0;background:var(--canvas);color:var(--ink);font-family:Inter,"Segoe UI",Arial,sans-serif;font-size:14px;line-height:1.45}button,input,select,textarea{font:inherit}button{cursor:pointer}
+.app-shell{max-width:1440px;margin:0 auto;padding:28px}.topbar{display:flex;align-items:center;justify-content:space-between;gap:24px;margin-bottom:25px}.brand{display:flex;align-items:center;gap:14px}.brand-mark{height:44px;width:44px;border-radius:14px;background:var(--ink);display:grid;place-items:center;color:#d5b676;font-weight:800;font-size:18px;letter-spacing:.04em}.eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:.13em;color:var(--teal);font-weight:800}h1{font-size:22px;line-height:1.2;margin:3px 0 0}.top-note{color:var(--muted);font-size:12px;text-align:right}
+.layout{display:grid;grid-template-columns:278px minmax(0,1fr);gap:22px;align-items:start}.panel{background:var(--paper);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow)}.sidebar{padding:18px;position:sticky;top:18px}.side-label{font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);font-weight:800;margin:3px 8px 10px}.module-list{display:grid;gap:7px}.module-button{width:100%;text-align:left;border:1px solid transparent;background:transparent;color:var(--ink);padding:11px 12px;border-radius:11px;display:flex;align-items:center;gap:10px;font-weight:650}.module-button:hover{background:#f5f9f8}.module-button.active{background:var(--teal-soft);border-color:#c5e3dd;color:var(--teal-dark)}.module-number{height:26px;width:26px;border:1px solid var(--line);border-radius:8px;display:grid;place-items:center;font-size:11px;color:var(--muted);background:#fff}.module-button.active .module-number{background:var(--teal);color:#fff;border-color:var(--teal)}
+.sidebar-divider{height:1px;background:var(--line);margin:20px 0}.history-head{display:flex;align-items:center;justify-content:space-between;margin:0 8px 10px}.history-head strong{font-size:13px}.history-count{font-size:11px;color:var(--muted)}.history-list{display:grid;gap:7px;max-height:360px;overflow:auto}.history-empty{color:var(--muted);font-size:12px;padding:8px}.history-item{border:1px solid var(--line);border-radius:10px;padding:10px;background:#fff}.history-title{font-size:12px;font-weight:750;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.history-meta{font-size:11px;color:var(--muted);margin-top:3px}.history-actions{display:flex;gap:7px;margin-top:8px}.history-actions button{border:0;background:#f1f6f4;color:var(--teal-dark);border-radius:7px;padding:5px 8px;font-size:11px;font-weight:700}.history-actions button.delete{color:var(--red);background:#fbefef}
+.content{min-width:0}.content-head{padding:23px 25px;display:flex;align-items:center;justify-content:space-between;gap:18px;border-bottom:1px solid var(--line)}.module-kicker{color:var(--teal);font-weight:800;font-size:11px;text-transform:uppercase;letter-spacing:.12em}.content-head h2{font-size:24px;margin:4px 0 3px}.content-head p{margin:0;color:var(--muted);font-size:13px}.status-pill{display:inline-flex;align-items:center;gap:7px;color:#397267;background:var(--teal-soft);padding:7px 10px;border-radius:99px;font-size:11px;font-weight:700;white-space:nowrap}.status-dot{height:7px;width:7px;background:#38a28e;border-radius:50%}
+.report-body{padding:22px 25px 30px}.metadata{padding:17px;background:#f7faf9;border:1px solid var(--line);border-radius:13px;margin-bottom:20px}.section-label{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:12px}.meta-grid{display:grid;grid-template-columns:1.1fr .8fr 1.2fr;gap:12px}.field{min-width:0}.field label{display:block;font-size:12px;font-weight:700;color:#3c555a;margin-bottom:6px}input,select,textarea{width:100%;border:1px solid #ccd9d6;border-radius:9px;background:#fff;padding:9px 10px;color:var(--ink);outline:none}input:focus,select:focus,textarea:focus{border-color:#60aaa0;box-shadow:0 0 0 3px rgba(10,118,110,.1)}textarea{min-height:78px;resize:vertical}
+.report-section{border:1px solid var(--line);border-radius:14px;margin:12px 0;background:#fff;overflow:hidden}.section-title{display:flex;align-items:center;gap:11px;padding:14px 16px;background:#fbfdfc;border-bottom:1px solid var(--line)}.section-index{display:grid;place-items:center;min-width:28px;height:28px;padding:0 6px;border-radius:9px;background:var(--ink);color:#fff;font-weight:800;font-size:11px}.section-title h3{font-size:14px;margin:0}.section-content{padding:16px;display:grid;gap:15px}.section-description{font-size:12px;color:var(--muted);margin:-2px 0 1px}.field-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}.field-grid .field.wide{grid-column:1/-1}
+.record-block{border:1px solid #e2eae8;border-radius:11px;overflow:hidden}.record-head{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:10px 12px;background:#f7faf9;border-bottom:1px solid #e2eae8}.record-head strong{font-size:12px}.add-row{border:1px solid #abd3cc;background:#fff;color:var(--teal-dark);padding:6px 10px;border-radius:8px;font-size:11px;font-weight:800}.record-empty{padding:13px;color:var(--muted);font-size:12px}.record-row{padding:12px;border-bottom:1px solid #edf1f0}.record-row:last-child{border-bottom:0}.record-row-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.record-row-grid .field{min-width:0}.record-row-grid .field.span2{grid-column:span 2}.record-row-grid .field.span3{grid-column:span 3}.record-row-grid .field.span4{grid-column:1/-1}.record-row-footer{display:flex;justify-content:flex-end;margin-top:8px}.remove-row{border:0;color:var(--red);background:transparent;font-size:11px;font-weight:700;padding:3px 0}
+.actions-bar{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:17px 25px;border-top:1px solid var(--line);background:#fbfdfc;border-radius:0 0 18px 18px}.local-note{font-size:11px;color:var(--muted)}.button-group{display:flex;gap:9px}.primary,.secondary{border-radius:9px;padding:10px 14px;font-weight:800;font-size:12px}.primary{border:1px solid var(--teal);background:var(--teal);color:white}.primary:hover{background:var(--teal-dark)}.secondary{border:1px solid var(--line);background:#fff;color:var(--ink)}.secondary:hover{background:#f4f8f7}.toast{position:fixed;right:25px;bottom:24px;background:var(--ink);color:#fff;padding:12px 16px;border-radius:10px;box-shadow:var(--shadow);opacity:0;transform:translateY(8px);pointer-events:none;transition:.2s;z-index:50}.toast.show{opacity:1;transform:translateY(0)}.print-heading{display:none}
+@media(max-width:980px){.layout{grid-template-columns:1fr}.sidebar{position:static}.module-list{grid-template-columns:repeat(2,minmax(0,1fr))}.history-list{max-height:220px}}
+@media(max-width:620px){.app-shell{padding:13px}.topbar{align-items:flex-start}.top-note{display:none}.layout{gap:13px}.module-list{grid-template-columns:1fr}.content-head{padding:18px;align-items:flex-start;flex-direction:column}.report-body{padding:15px}.meta-grid,.field-grid{grid-template-columns:1fr}.field-grid .field.wide{grid-column:auto}.record-row-grid{grid-template-columns:1fr 1fr}.record-row-grid .field.span4{grid-column:1/-1}.report-section[data-section-id="occurrences"] .record-row-grid .field.span3,.report-section[data-section-id="incidents"] .record-row-grid .field.span3,.report-section[data-section-id="actions"] .record-row-grid .action-reference-field{grid-column:span 1}.actions-bar{padding:14px;align-items:flex-start;flex-direction:column}.button-group{width:100%}.button-group button{flex:1}}
+@media print{body{background:#fff;font-size:11px;color:#111}.app-shell{max-width:none;padding:0}.topbar,.sidebar,.content-head,.actions-bar,.toast,.add-row,.remove-row{display:none!important}.layout{display:block}.panel{border:0;box-shadow:none;border-radius:0}.report-body{padding:0}.metadata{background:#fff;padding:10px;margin-bottom:10px}.report-section{break-inside:avoid;margin:8px 0;border-color:#aaa}.section-title{background:#eee;padding:8px}.section-content{padding:9px;gap:8px}input,select,textarea{border:0;border-bottom:1px solid #aaa;border-radius:0;padding:3px 2px;box-shadow:none!important;background:transparent}textarea{min-height:42px}.record-head{background:#eee}.record-row{break-inside:avoid}.local-note{display:none}.print-heading{display:block!important}.print-heading h1{font-size:18px;margin:0 0 3px}.print-heading p{margin:0 0 12px;color:#333}}
+
+.screen-metadata{display:block}.print-metadata,.print-details{display:none}
+.meta-grid .field.wide{grid-column:1/-1}
+.print-textarea-value{display:none}
+.print-entry-list-value{display:none}
+@media print{
+ .event-time-field input[type="time"],.start-time-field input[type="time"]{width:8em;max-width:100%}
+ @page{size:letter portrait;margin:1.60in .94in .71in;
+  @top-left{content:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGIAAABICAYAAAANkiBeAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAABWJSURBVHhe7ZwJeFvFtYDPzL3aJcuW7VjeJFmWJcuyvMvWbnmTF3nft2zQhJCVLEBMwpYAKdkJLaV9pQu0fa/rB/1KoU37QtNCoR99XaDQ0A1oS0h57SMJWUiA8765soN0Y9M8sLP06f++89nWzNFI99yZM3POuQZIkCBBggQJEiRIkCBBgisZJ6SAA0qhCFpoGSzgy+kNnEuyhwsoHuRrkx6hQd0TtDbtWVo/70XaoH+FhLOPkObcN0mz8SRpNZ0mLebjpDn/DRK2/Im0WH5OWs2PQaPhARrMupUGdIs4l6wBCsAMAErx0AliKYRirgJ6uBJohxJo4Z0Q5Ev5aolLWSb1q4ukXo1N6tdYpR51IZQnl0ClrhqqU+s4f2o3rUtfTOuyJ0i94T7SanqUtFieI222E6SnGMlQOZLRKiSDlUi6nEhaC/9Cwub9JKTfQ71JY1AERQAgEX+cBLOHWloIVs6jjNDazAkSNnyLtNpeJj2lCGNuhPk+hOEaJB3F75JWywukMfMB6k4ahSzIFb9RgtlHBsVQQr0py0iD4WskYnsNBioR5gcQxgNIBqqQRAqPkybD49SfshRyIFv8BgnmghTQshlD6rMfIBHbYRhwIYwFEEb8UaO02/5BGnO+wFfxtWLVf0kqAZQ6C+QkeXiXpkvTphlKna8azVytHM3arFiQs02+KGe3fHHuPvni3Hvliw17FQuy75aP59yqGtGv04ykL1b3qbvUIblP6wSzDUAjfv8LQg1p1KO9ioRNPyHdJQgjPoQhP8KwB0lPCdKw8SBXo+gTq12xpKZCVlKrqkk1ql+rWGr6vGyV9UfStYWvSiecb0k2lSO/1YX8dg/yO33I7Qkgd08Q6b5apPeGYqQWuX1B5PYGkN/jR/5uD/K3VaF0U9lp6fWO12VrCn+muDbva8r5Wbeoe7Xd6UVgGQDgxJ9lJrgKro405TxCup0Iw16EAa/wk/SVI2kxHoQKWbNY57InCyCV3eXKxdm7ZKutP5XeUHxMsqUK+Z1epHvZRQ4hubceyb110Yu8N4j8Lh/yd7uR3+JCZhzJROkZ6caSk7IJ5zHZRPGbsgknk6PMeNKJ0tOSm8rf42+vihrwngByn6xF7v465O6rFcaRbCp7R7a+8HnFNYYHlL2p87VWyBN/zungKrh6Ejb+SPAjg16EPnfUIN0lSBqyHrrsfYgRIDmpK2VIsSzvq9IbHEckd7iQ2+1HurcWyZ4Qkr3sgtcixy7SbZUovdF5XLba9oJied53lFflfkI1rF+fNJwyktSiDLPlSu0Ae7IdjMYi0FsskG61QprZDPN0BZCd5IB8VTmUqOvlAc2gpkM9PG+JYjx7i+Ja44OyVbaD0usdr0luqUB+jw/5T9Uif4+fGfasfGXBAdVQ2hqtEUzizy+GepOWkXbr34XZ0VuD0O9BGHYjabO8xlUpesX9LznJbnAqr87eJb2+6FXJtmrh7ia7gkh2BpHuqUVulw8lt1agdEPRy/Jr8r6pGtWv17bIGnQ5kF0LwIvfbzYoAlCnVEFxUm/KkPyqnN2y1dan2Azj9/qQ/4QfJZtKzyiW5f2HtkXVINaNwwY2EjYehKGa6MzorUYY8gn+gwRSbhd3vyRog1CuvMb0ZelEyVlujx8pu/h3BwQjsJkgubkc5WusP1ctytyS0sL7mXMWv8fFJNkERlVn8phiad5XpBud/8Pv86Fkew3K1hQ8qW5Td4n7xyAnoYwvwqALoc8TNQbzH4NVSEIZnxF3vmikK0GvXJT9KelNJWeZ4yQ7Aki2+ZDsDiK/w4OyDUWvK6/O2atr4mvEupcLevY1enWLZKutByXbXCjZVYPy1QXf07qhQtx3ClKXfj8MMWNMzgy2VA1VIwmm3y/uO+eo29V9svX2P7MZQHYEkd7lRbozgPwuL8o2FL6sHEu/fh5AhljvAmE7HA0YIBNMYIMCKIMCvgYKeQ8U8m4wQxWYoRhMYAQDpLA7VfwGHwZNHe+VL8//hnSbC6W3l6N6VL9Z3GcKUp/5CNvaCj5j0hhkoBKpV7tW3HfOUI3Nu0tye6Ww7tO7fEi3+QR/IJ1wnlKN6+9kOyWxzgwQ0IMRXMoW8OnXQ53h8yRsOQDNtpeg1X6MdDiQdJUg6SlD6C2PSk85QlcZQkcJQrvjDETsb0LY+nvSmP8TqM/5KvFnboXqpBEogFIAUIgHvBDUIXmtbJ3tKemeGpSvtDxuYEc/MRpIJW35f4Yh5sCrozLoRdJhPyMpgjJx91kFAYhiUfbn+J2e6Cy404vkbr/gB+SrLM9oa9jZ7J+gggzw6AagwfhZaLb8gXQUIfSXCsKCctBehNBq+weEbb+HpoJfkaaCn5Gw5WnSZHkGGq2/gLD1t9BiOwyRohPQXoLQW4kw4kYY9yEsCCCM+RAGq5F0ON8jzQUvQ13ut8ClWwUWIbh3wbDvqhzPvFF2RwXK19meT09nq1g8tFq5APor3l+imIx4kTRkPy7uO6sox/T3sqWHbA9MGiEg+ALl4uwvZX6wA5ZCja4PGkyPQqv1Peh2sIv9LglbnoVQ7qfBm34tVCibIR8ckAHzBHPNvItir6tAD+lggCJwyhqgRrsIvPptUG94GMKWQ6S9+G0hXDHuR5gfRBhyI0QcZ6HB9CS4k1eB8vyLOhPaRlWDbMJxSr6m4FfTfEcJac5/KW5WsCWK3VAlc+QXkzqTxyR3ugSHzPwB2eYXTr+qhZkPiPvGoIFgxo0QNh+GDhtCc/7voS53J7hUDWxqizvPElLIAytUqYYhmHkfhC3PQycLWXijRmGzpdV2BPzztoMOcsTK06F0SyrkN9jfVSwxPiRuI6HMHexMcc4QTNgZoy5jl7jvR8ZggBTZdbbDUZ/gjcqeICquMR2cMXTgnfcxaDQegWbzUajP/SSUKVziLhcJHoqgGgIZd5Dm/BegtwJhPBg1TJvtb1CTvEasMB3KjrR2xQ2FqOpKDcW+Tn1Jg9HladJpC4bwImk2Pxnbb1ZQDaStFkISzCkzI+wIoPSmklMpLnCI+0K5IguCGftJU85foTZzIySBTtzlEiKFUkU31Bv3Q3dp1CDsTFCX812Y9893eMolxq8rlpoOxL7G1XAhwt4r1k8wp91ifSW236wgX2H5AQtJvD8bAqj4mOnfxf2gXO4hHu0L4EvbB9ppdhqXE05pKzSYnhFOyiwX0Zj3Ihg+OAalakkuUSwxvJFeqzznYziPshl6y843RJvt9XjtWUCyvuhVdloWjLDNh/zHa1DVmzwa18kJblJGvwlOeSDu9csbCbhTt0BXieA/SIPxOdBCsrhTLMpF2c8q+9LDU3/TQOoKwmbV1HmCyRBbmgoOxWvOAtIbHX8X4kXMEHf7UXJLJWrCcu+5DmxaW2Dx5OHqyqNMuRA6S94Vtr6+jH8TN8eiGs94WNWfNjz1N2nIeSQaDIx11l4kTYZH4zVnAck6+x/o7vcNwd9WieoW+ftZqxTQxilcibi0twm7n3bHe2CFEnHzFJqRtIdVPbom9rssHyykw34SBibjToLUIBlyIQ3orhPrfmTky8zfFnIHU0vTDg+qRtJXivtd4aig2XpEOHv49NvFjYyMJlBpBnUHVPUqwbGTkP7L521dBf9gPQY2loqZZVTdyePML5CP+89tXWXL838i7nfFE8p5UCgkqDd+R9zESOpNGtL0J3+Z/c5VKwZIL4sIxM8GoTIkmLZNrDsrGAHk8pUFv6H3RHdOLKwh2VqF2lb1v04Ol+FL3wjjXoRgzoPiJqgFPqlP+0TakMYKRVBG2m3HhaxdnG/wIQmbDkHqh8ybXwjaOlW99OYyIccghDd2B1G2wf5axgVkuK4YQjlfhJFqhKqkc854Ck2fdl/KgHojZIGVtBUcYUmhOCOwJFG77SQ4+Lk/uKr60tZK7nIh2RkNc3DsdL3a8mtd9oWFCi5r2Bmii8Wj8n4tHPxiSOpPntD2qx8Cu6KLdBT+Iy62NGWEzqKzXKWiO1ZvTlH2p22SbK1Esrs2etLeE0T5WutLmpo5CnJdHJQkbP4v6LCdgEJJcczrRDuq25bUo3yC+FL3QVfJ2XgjMJ8gzITjXJW0M0bv4qDp1C6WThS/JRQDMAe+R8hFnNAMpa2bMfZ0ucKSS815v4C2guPgkPumXtZ1q+2a8eT9is6k/yaNpt9AP0uLxjjmqQKCVvOLYIdLdxNqq6BcsTL/x/x2t+AvyK5aoQRGscrylKZJ2Sruf1kSmLeMtOQdh2bj06CLlsbo/ZCump+6VbUw7bhsKAeh3fmOkJeeCuqxn2wp6i1lEdYvzGEU+cK5FYAmjehWyjbY/8yCgkKZzD0hZNk7xXLzfpaIn6vqjI+ADNzpC0lD7gvQbHodfJlXsxcNPZCpGtPeJl+U9RfpwnwkvU6EHvf7MSTBAJOFAi35z3HVF9EfXCgsAa8e12+WbbC/wmaFUCz2iTpk9Uzytdbn1PP1tyTXzHxavQhQqNHUQF32Lmg0/BYajM+DL3OjxgwFyb0QVA6lfEk2nHWcH7ch6S9H6GZ3/5QB3NHYETNAm+WPNCiEzT9UCvaiwQrL1ANpSxUrLU9KNpUhZUVl99ULZZPSzeXvyq+zPa1alL1FG5GFps0Dzx5SyJdZwJM+AMHcfVBnYJnAl0ko66AkqN2qDtOl6j71Xvlgxu8kw2akwyzl6orOAGYAdvcLZZYeJL1lzA/8kvqTV7EVWTzQZY+iGtxcd9r93MLsv3LrCpHeyQrOAsjt9aPkziqUThQfka+17Vd8zLBTPZh6jaZZ2im3gVedCoVKYZIJX5qlJmWTD5IwYdtKdjdqWNEwaGVmyElyQWlyBKrnXQPu7J0klPNt2mg4xIWzT3OtWciHU4/LmrTPK1rV/6nsSv6xrC/7MD9YgHSInYpZ1JRdfE+0Tokd0NjFH6iMVoI35H6FqxH8HRV/vyuRFM4GfVxQ8QWuPf1P3KgJ6QoH0o0VyN3uQn5rFUq2lqN0czHK1ttQvjLvjGJZ7jH5Yv0birGMV+RDGb+T92e8KO/NeEHepT8k7c78o7Qn87CsL/tNWV/uKVm/EWWjeShfYEb5AiMqxnNQMZqJ8iE9ynr170h6Daf5PhvSwVIU8tjCmu9F6GfrfbS4mOUkhDs/Yj1MGnO/QX3JCyF3DmJFlxFKsPMBWp18EwlkfJc25f6FtpuRDBQiGXciuboU6dIypMtKkVtegtyKYuSXO1Cy3I6SawtRsqwQpUttKLnaipLFBShZUID8eAHyI1bkBm1I+4uQ9LFlpmJyffcg9PsQBvyTJfas1N6NwJ59YI9xRWxHSNj0Q1KbcQfnljVe9smsOSMd1OBUVoA3dRz82dtJvfER0pD/S9Jse4O02N8mESdCN6tpqkToq4ouJf1s/WYX0zNZ7jgpbEczxJYXt1AgAP2VSLrLkHQ4zgrLTHP+b0jY8Cipy9pLfdqroZz3aP9JEuj/O1RrhGT2/BtfLg9CUN1L/WlLqC/jRhLQ30lqs/aShqz7SWP2A6Qx+/OkIftzpD7r0ySUtY8E9dtoIGOCBlKXcX71AFchq5OyeqZCYa9/uW2jEyRIkCBBgjmmBFSqGshgApUXeOKsBR6ckCN3QK6iVAiyxUdqbaCRV4KBtYMF0uPa3kcF5WCBYigEB9iFn06wgR0KZE4wy8vByD6bSIeDUsgWxnVCjvA5Lhy5bIbxwAlmWSmYoAjUYqWLBg2lrKMDhcfooOMY15pxXk3otJSDhXYY36QDzre4NuPrYAZDbDMf0V7HDdpP0MHiEySc+Uhsm0CNtIC2mw7RvuLTtKvoDO1yTErRGdrtOE17HKe43sKT1Ksai9PLh1waMR1m49JO41GoBUtc+0xUQS5tN/6a9k4zXpfjbdrtOMX120/SRu0SsepFgzboN5NxD5L5QaQR48Pi9mmpAhvpcSAZDyHtLDoFojQr35VxI53vRTI/gKQl74exbQzakrqRzPcgYZUSrHZozB0v4x6kC1gpS9KyOEUTGEln0Uk2Lul1IHjBFtc+A7Q2ZRkZr555vDEP0sVupOGU9WLdiwatn7eJjFYjGfUyQ3xD3D4tLrCSbvtZMuJH2mE/JiRlYuA709bRyfckrXnfi21j0Pa0zWSU1Q15kXZaX6V1aWtpffoKWpe+ijakrab1aWtofep6KJXE1+TawEQ77cfZuKTb/g74wRrXPgM0lLaGDLsmxys8QutSNwjj1aevPDdeY+p6SbWSPRRzaaB1+uhFmUVD0DbdajLimtkQkbSbhDHHfOzB82lLXqbFCnkfzhDpKwRDjPmQtpkuz/KhOTFEc/KKCzLEsBdpe/5LtF4XvTOnRJgRujVQC2lxih/WEMH05YIh2HgdlldoSLeahkTjhXRr2AZErHvRmBNDNKYsI8NVSEZ9H2yIPrY81SAZj/qFczLfh3SsFCXNoidCC8BMO+1vfWhD9NcgGWTjxYw1Nd5oOXKuS/gvIWi9/taPbAjRrok2JS+/oBkx4EbaW3KW9hS+SXvsTI4K0lt0lOs2H5U0i57bcEA+7Sg6+X82RG36tYIhhPFK35l+vPyjfDV/6Srg4wzRbvy6uH1a2K6p2/5O1BCFb4kfDqGtujVTGwDSatof2ya0TxlCmDGGg1o/pGhckCoWGBCdT8SG8EJ+XPsMnDPEqA9pxPTzJDfomJw3XuUl/A9ocYZozfmmuH1aHJBLuuynybAP6WAl0jrt9TGtStpmOEBGPEjGmCEM345pE4g3RO55hpqRWEP02N8RDmZRSIywLBz7eY54Q+Q9Hdt22UDqM7aQUXd02nY7jtJW89OT8owgbfnP0IjhZ3worvCMo62Gg2Tcj2TQg6SvFGmb8fukOeuzJJL3PCtnF/bsY1VI61PizwJRQ9wcHdODpLv4GG0zPk4jpu/SiOkxQdrzHqMdhsc5t6oxTtEJNtrpeJttQ0l/JdJ2yyHSyv4BY/4vzklXwa9IfdqOWDUazFhNhtk5woO0x3mCRozfp+2mR8+NF8l7jHYbH+dCmkis3kWF1qVtJgvd0buTXdiFwXhZFEKyuAa5iKgCzi2poF35fxOc3Zg/engTJBjdlo66kLZksQMiy1XHQZt1a8j8yRnBdBexcWLGXFyL9Cov0mDy8jjFIjDQDtu7wjhs2VsQOP/zLq1H0h7/fBwNJC8k45ObB/bZhO8Vq1eLdIkfaXNq7My+yAQgk7RkPkg7zE/QtrwD54v5AI3kPsE38lViVSiBPNKSsYu25z9LOgr+Srqsr5P2gj+SNuMPJmfC9NWCTkjhmjMfoh2Wp2gk78nzxfwkjZiemkz4x0HrUpbQLuEu/h6NGM+XLvP3aYPu5jglG2hIk/4zHzheZ95PuaC6J04vQYIECRIkSJAgQYIECeaY/wWeIbSDcxoZ2wAAAABJRU5ErkJggg==");display:block;width:1.1in;height:.83in;margin:.49in 0 .28in;padding:2pt;border:1px solid #000;box-sizing:border-box}
+  @top-center{content:"RELATÓRIO DE SEGURANÇA DA CENTRAL DE TRATAMENTO";display:flex;align-items:center;justify-content:center;width:4.42in;height:.83in;margin:.49in 0 .28in;padding:2pt;border:1px solid #000;border-left:0;box-sizing:border-box;font:700 9.35pt/1.25 Arial,sans-serif;text-align:center;white-space:pre-line}
+  @top-right{content:"Página " counter(page) " de " counter(pages);display:flex;align-items:center;justify-content:center;width:1.1in;height:.83in;margin:.49in 0 .28in;padding:2pt;border:1px solid #000;border-left:0;box-sizing:border-box;font:9.9pt Arial,sans-serif;text-align:center;white-space:nowrap}
+ }
+ body{font-family:Arial,sans-serif;color:#000;font-size:10pt}
+ html,body,.app-shell,.layout,.panel,.content,.report-body{background-image:none!important}
+ .screen-metadata{display:none!important}
+ textarea{display:none!important}
+ .print-textarea-value{display:block!important;min-height:42px;padding:3pt 2pt;border-bottom:1px solid #aaa;color:#111;font:10pt/1.3 Arial,sans-serif;white-space:pre-wrap;overflow-wrap:anywhere;word-break:normal;break-inside:auto}
+ .print-summary-value{min-height:0;padding:0!important;border:0!important;background:transparent;font:10pt/1.4 Arial,sans-serif}
+ .report-section[data-section-id="summary"]{break-inside:auto;overflow:visible}
+ .report-section[data-section-id="summary"] .section-content{display:block}
+ .report-section[data-section-id="summary"] .section-title{break-after:avoid}
+ .record-block[data-record-key="daily__people_entry"],.record-block[data-record-key="daily__personnel_entry"]{counter-reset:personnel-entry}
+ .record-block[data-record-key="daily__people_entry"],.record-block[data-record-key="daily__personnel_entry"]{border:0!important;overflow:visible}
+ .record-block[data-record-key="daily__people_entry"] .record-head,.record-block[data-record-key="daily__personnel_entry"] .record-head{padding:0 0 4pt;border:0!important;background:transparent}
+ .record-block[data-record-key="daily__people_entry"] .record-row-grid,.record-block[data-record-key="daily__personnel_entry"] .record-row-grid{display:none!important}
+ .record-block[data-record-key="daily__people_entry"] .record-row,.record-block[data-record-key="daily__personnel_entry"] .record-row{padding:0;border:0}
+ .record-block[data-record-key="daily__people_entry"] .record-row-footer,.record-block[data-record-key="daily__personnel_entry"] .record-row-footer{display:none!important}
+ .record-block[data-record-key="daily__people_entry"] .print-entry-list-value,.record-block[data-record-key="daily__personnel_entry"] .print-entry-list-value{display:block!important;counter-increment:personnel-entry;padding:0;border:0;background:transparent;white-space:pre-wrap;overflow-wrap:anywhere;color:#111;font:10pt/1.3 Arial,sans-serif}
+ .record-block[data-record-key="daily__people_entry"] .print-entry-list-value::before,.record-block[data-record-key="daily__personnel_entry"] .print-entry-list-value::before{content:counter(personnel-entry) ". ";font-weight:700}
+ .record-block[data-record-key="daily__people_entry"] .record-row[data-print-empty="true"],.record-block[data-record-key="daily__personnel_entry"] .record-row[data-print-empty="true"]{display:none!important}
+   .report-section[data-module-id="cctv"][data-section-id="start"] .record-block[data-record-key="start__distribution"]{counter-reset:cctv-distribution;border:0!important;overflow:visible}
+  .report-section[data-module-id="cctv"][data-section-id="start"] .record-block[data-record-key="start__distribution"] .record-head{padding:0 0 4pt;border:0!important;background:transparent}
+  .report-section[data-module-id="cctv"][data-section-id="start"] .record-block[data-record-key="start__distribution"] .record-row-grid{display:none!important}
+  .report-section[data-module-id="cctv"][data-section-id="start"] .record-block[data-record-key="start__distribution"] .record-row{padding:0;border:0}
+  .report-section[data-module-id="cctv"][data-section-id="start"] .record-block[data-record-key="start__distribution"] .record-row-footer{display:none!important}
+  .report-section[data-module-id="cctv"][data-section-id="start"] .record-block[data-record-key="start__distribution"] .print-entry-list-value{display:block!important;counter-increment:cctv-distribution;padding:0;border:0;background:transparent;white-space:pre-wrap;overflow-wrap:anywhere;color:#111;font:10pt/1.3 Arial,sans-serif}
+  .report-section[data-module-id="cctv"][data-section-id="start"] .record-block[data-record-key="start__distribution"] .print-entry-list-value::before{content:counter(cctv-distribution) ". ";font-weight:700}
+  .report-section[data-module-id="cctv"][data-section-id="start"] .record-block[data-record-key="start__distribution"] .record-row[data-print-empty="true"]{display:none!important}
+.print-metadata{display:table!important;width:100%;border-collapse:collapse;table-layout:fixed;margin:0 0 8pt;font:10pt Arial,sans-serif;line-height:1.4}
+ .print-metadata th,.print-metadata td{width:50%;border:1px solid #000;padding:6pt;vertical-align:middle}
+ .print-metadata th{text-align:left;font-weight:700;font-variant:small-caps}
+ .print-metadata .zone-field-value{font-weight:700}
+ .print-details{display:flex;justify-content:space-between;gap:12pt;border:1px solid #000;padding:5pt 6pt;margin:0 0 8pt;font:9pt Arial,sans-serif}
+ .report-section{border-color:#000;border-radius:0}
+ .section-title{background:#fff;border-color:#000}
+ .section-index{background:#000}
+ .record-block,.record-head,.record-row{border-color:#000;border-radius:0}
+  .record-row-grid .field{border:1px solid #000;padding:4pt}
+  .report-section[data-section-id="actions"] .record-row-grid .action-textarea-field,.report-section[data-section-id="start"] .record-row-grid .start-observations-field{border:0!important;background:transparent!important;padding:0!important}
+  .report-section[data-section-id="actions"] .record-row-grid .action-textarea-field .print-textarea-value,.report-section[data-section-id="start"] .record-row-grid .start-observations-field .print-textarea-value{border:0!important;background:transparent!important;padding:3pt 0!important}
+  .report-section[data-section-id="actions"] .record-row-grid .action-type-field,.report-section[data-section-id="actions"] .record-row-grid .action-reference-field,.report-section[data-section-id="actions"] .record-row-grid .action-responsible-field{border:0!important;background:transparent!important;padding:0!important}
+ .report-section[data-module-id="treatment"][data-section-id="start"] .record-row-grid .start-time-field,.report-section[data-module-id="recovery"][data-section-id="start"] .record-row-grid .start-time-field{border:0!important;background:transparent!important;padding:0!important}
+ .report-section[data-section-id="occurrences"] .record-row-grid .event-time-field,.report-section[data-section-id="occurrences"] .record-row-grid .event-location-field,.report-section[data-section-id="incidents"] .record-row-grid .event-time-field,.report-section[data-section-id="incidents"] .record-row-grid .event-location-field{border:0!important;background:transparent!important;padding:0!important}
+ .report-section[data-section-id="occurrences"] .record-row-grid .event-location-field .print-textarea-value,.report-section[data-section-id="incidents"] .record-row-grid .event-location-field .print-textarea-value{border:0!important;background:transparent!important;padding:2pt 0!important}
+ .record-row-grid .field label{font-variant:small-caps;font-size:8pt;color:#000}
+ .record-row-grid input,.record-row-grid select,.record-row-grid textarea{border:0;border-radius:0;padding:2pt 0;color:#000}
+ .report-section[data-module-id="treatment"][data-section-id="start"] .record-block[data-record-key="start__distribution"] .record-row-grid .field.span2{grid-column:1/-1!important}
+.report-section[data-module-id="recovery"][data-section-id="start"] .record-block[data-record-key="start__distribution"] .record-row-grid .field.span2{grid-column:1/-1!important}
+ .record-head{background:#fff}
+ .section-content{font-family:Arial,sans-serif}
+}
+</style>
+</head>
+<body>
+<div class="app-shell">
+<header class="topbar"><div class="brand"><div class="brand-mark">CT</div><div><div class="eyebrow">Central de Tratamento, Recuperação e Separação Manual de Diamantes</div><h1>Registo e compilação de relatórios</h1></div></div><div class="top-note">Os rascunhos são guardados neste dispositivo<br>Desenvolvido por: Eng. Gilson Meno</div></header>
+<div class="layout">
+<aside class="panel sidebar"><div class="side-label">Módulos</div><nav class="module-list" id="moduleList"></nav><div class="sidebar-divider"></div><div class="history-head"><strong>Relatórios guardados</strong><span class="history-count" id="historyCount">0</span></div><div class="history-list" id="historyList"></div></aside>
+<main class="panel content">
+<div class="content-head"><div><div class="module-kicker">Novo relatório</div><h2 id="moduleTitle"></h2><p id="moduleDescription"></p></div><div class="status-pill"><span class="status-dot"></span><span id="saveStatus">Rascunho neste dispositivo</span></div></div>
+<div class="report-body" id="reportBody"></div>
+<footer class="actions-bar"><div class="local-note">Os dados ficam guardados apenas neste navegador.<br>Na impressão, desactive “Cabeçalhos e rodapés” do navegador.</div><div class="button-group"><button class="secondary" id="newButton" type="button">Novo relatório</button><button class="secondary" id="printButton" type="button">Imprimir / Guardar PDF</button><button class="primary" id="saveButton" type="button">Guardar relatório</button></div></footer>
+</main></div></div>
+<div class="toast" id="toast" role="status"></div>
+<script>
+(function(){
+"use strict";
+const field=(id,label,kind,extra)=>Object.assign({id:id,label:label,kind:kind||"textarea"},extra||{});
+const line=(id,label,type)=>field(id,label,"input",{inputType:type||"text"});
+const records=(id,label,columns)=>field(id,label,"records",{columns:columns});
+const col=(id,label,type,options)=>({id:id,label:label,type:type||"text",options:options||[]});
+const section=(id,title,fields)=>({id:id,title:title,fields:fields||[]});
+const incidentCols=[col("when","Hora","time"),col("where","Local","textarea"),col("how","Descrição","textarea"),col("impact","Impacto","textarea")];
+const occurrenceCols=[col("when","Hora","time"),col("where","Local","textarea"),col("how","Descrição","textarea"),col("impact","Impacto","textarea")];
+const modules=[
+{id:"treatment",name:"Tratamento e Recuperação",description:"Registo diário, situação operativa, actividades e ocorrências.",sections:[
+section("summary","Resumo Executivo",[field("summary_text","")]),
+section("daily","Registo de Entrada",[records("people_entry","Registo de entrada do pessoal (STSCT)",[col("name","Nome"),col("time","Hora","time"),col("area","Área")])]),
+section("start","Início das Actividades",[records("distribution","Hora de Início e Observações",[col("time","Hora de Início","time"),col("notes","Observações","textarea")])]),
+section("occurrences","Ocorrências",[records("occurrences_list","Registo de ocorrências",occurrenceCols)]),
+section("incidents","Incidentes",[records("incidents_list","Registo de incidentes",incidentCols)]),
+section("actions","Acções tomadas",[records("actions_list","Acções associadas às ocorrências ou incidentes",[col("case_type","Tipo de registo","select",["Ocorrência","Incidente"]),col("case_ref","Referência / descrição do caso"),col("action","Acção tomada","textarea"),col("resolution","Resolução","textarea"),col("responsible","Responsável")])]),
+]},
+{id:"recovery",name:"Recuperação",description:"Registo diário, situação operativa, actividades e ocorrências.",sections:[
+section("summary","Resumo Executivo",[field("summary_text","")]),
+section("daily","Registo de Entrada",[records("people_entry","Registo de entrada do pessoal",[col("name","Nome"),col("time","Hora","time"),col("area","Área")])]),
+section("start","Início das Actividades",[records("distribution","Hora de Início e Observações",[col("time","Hora de Início","time"),col("notes","Observações","textarea")])]),
+section("occurrences","Ocorrências",[records("occurrences_list","Registo de ocorrências",occurrenceCols)]),
+section("incidents","Incidentes",[records("incidents_list","Registo de incidentes",incidentCols)]),
+section("actions","Acções tomadas",[records("actions_list","Acções associadas às ocorrências ou incidentes",[col("case_type","Tipo de registo","select",["Ocorrência","Incidente"]),col("case_ref","Referência / descrição do caso"),col("action","Acção tomada","textarea"),col("resolution","Resolução","textarea"),col("responsible","Responsável")])]),
+]},
+{id:"manual_evaluation",name:"Separação Manual e Avaliação",description:"Abertura, actividades, inspecções, selos, ocorrências e fecho das salas.",sections:[
+section("summary","Resumo Executivo",[field("summary_text","")]),
+section("daily","Registo de Entrada",[records("main_door_open","Abertura da Porta Principal",[col("opened_by","Quem abriu"),col("time","Hora","time")]),records("personnel_entry","Registo do pessoal",[col("name","Nome"),col("time","Hora de entrada","time"),col("role","Função / equipa")]),records("room_opening","Abertura das salas e pessoal autorizado",[col("room","Sala / área"),col("opened_by","Quem abriu"),col("time","Hora","time"),col("authorized","Pessoal autorizado","textarea")])]),
+section("weighing_glovebox","Abertura das Glovebox na Sala de Pesagem",[records("weighing_seals","Rompimento e aplicação de selos",[col("seal_broken","Selo rompido"),col("broken_by","Rompido por"),col("broken_at","Hora","time"),col("seal_new","Novo selo aplicado"),col("applied_by","Aplicado por"),col("applied_at","Hora","time")]),line("weighing_start","Início da actividade","time"),line("weighing_end","Término da actividade","time")]),
+section("picking_glovebox","Abertura das Glovebox na Sala de Picagem",[records("picking_seals","Rompimento e aplicação de selos",[col("seal_broken","Selo rompido"),col("broken_by","Rompido por"),col("broken_at","Hora","time"),col("seal_new","Novo selo aplicado"),col("applied_by","Aplicado por"),col("applied_at","Hora","time")]),line("picking_start","Início da actividade","time"),line("picking_end","Término da actividade","time")]),
+section("canister","Abertura da Canister Room",[records("canister_seals","Selos rompidos e aplicados nas urnas",[col("urn","Urna"),col("seal_broken","Selo rompido"),col("broken_by","Rompido por"),col("broken_at","Hora","time"),col("seal_new","Novo selo aplicado"),col("applied_by","Aplicado por"),col("applied_at","Hora","time")]),line("canister_start","Início da actividade","time"),line("canister_end","Término da actividade","time")]),
+section("acidification","Actividade na Sala de Acidificação",[records("acid_authorized","Pessoal autorizado",[col("name","Nome"),col("authorization","Autorização / função")]),records("acid_opening","Abertura da sala",[col("opened_by","Quem abriu"),col("time","Hora","time")]),line("acid_start","Início da actividade","time"),line("acid_end","Término da actividade","time")]),
+section("evaluation_room","Actividade na Sala de Avaliação",[records("evaluation_authorized","Pessoal autorizado",[col("name","Nome"),col("authorization","Autorização / função")]),records("evaluation_room_open","Abertura da sala",[col("opened_by","Quem abriu"),col("time","Hora","time")]),records("safe_room_open","Abertura da Sala dos cofres",[col("opened_by","Quem abriu"),col("time","Hora","time")]),records("safe_open","Abertura dos cofres",[col("safe","Cofre"),col("opened_by","Quem abriu"),col("time","Hora","time")]),line("evaluation_start","Início da actividade","time"),line("evaluation_end","Término da actividade","time")]),
+section("occurrences","Registo de Ocorrências nas áreas",[records("occurrences_list","Registo de ocorrências",occurrenceCols)]),
+section("incidents","Registo de Incidentes",[records("incidents_list","Registo de incidentes",incidentCols)]),
+section("actions","Acções Tomadas",[records("incident_actions","Acções associadas às ocorrências ou incidentes",[col("case_type","Tipo de registo","select",["Ocorrência","Incidente"]),col("incident_ref","Referência / descrição do caso"),col("action","Acção tomada","textarea"),col("resolution","Resolução","textarea"),col("responsible","Responsável")])]),
+section("preclose","Inspecções antes do fecho",[records("glovebox_preclose","Inspecção das Glovebox antes do fecho",[col("room","Sala"),col("inspector","Quem inspeccionou"),col("time","Hora","time"),col("notes","Observações","textarea")]),records("room_preclose","Inspecção geral antes do fecho de cada sala",[col("room","Sala"),col("inspector","Quem inspeccionou"),col("time","Hora","time"),col("notes","Observações","textarea")])]),
+section("closing","Fecho das Salas e Fecho da Porta Principal",[records("room_close","Fecho das salas",[col("room","Sala"),col("closed_by","Quem fechou"),col("time","Hora","time")]),records("main_door_close","Fecho da Porta Principal",[col("closed_by","Quem fechou"),col("time","Hora","time")])]),
+section("compile","Compilar Relatório",[line("compiled_by","Relatório compilado por"),line("compiled_at","Data e hora da compilação","datetime-local"),field("compile_notes","Observações finais")])
+]},
+{id:"cctv",name:"CCTV",description:"Registo diário, inspecções dos sistemas, ocorrências e passagem de turno.",sections:[
+section("summary","Resumo Executivo",[field("summary_text","")]),
+section("daily","Registo de Entrada",[records("personnel_entry","Registo de entrada do pessoal (STSCT)",[col("name","Nome"),col("time","Hora de entrada","time"),col("area","Área / equipa")])]),
+section("start","Início das Actividades",[records("distribution","Distribuição por Áreas",[col("person","Nome"),col("area","Área"),col("notes","Observações","textarea")])]),
+section("occurrences","Registo de Ocorrências nas áreas",[records("occurrences_list","Registo de ocorrências",occurrenceCols)]),
+section("incidents","Registo de Incidentes",[records("incidents_list","Registo de incidentes",incidentCols)]),
+section("actions","Acções Tomadas",[records("actions_list","Acções associadas às ocorrências ou incidentes",[col("case_type","Tipo de registo","select",["Ocorrência","Incidente"]),col("case_ref","Referência / descrição do caso"),col("action","Acção tomada","textarea"),col("resolution","Resolução","textarea"),col("responsible","Responsável")])]),
+]}
+];
+const activeModules=modules.filter(m=>m.id!=="recovery"&&m.id!=="cctv");
+const STORAGE_KEY="central-diamond-reports-v1";
+let store={drafts:{},reports:[]},selectedModule=activeModules[0].id,current=null;
+function today(){const d=new Date();return new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,10)}
+function objectiveFor(name){return "Este relatório visa documentar os principais aspectos relacionados com a segurança na CT, com base nos registos da área de "+name+"."}
+function freshReport(moduleId){return{id:"",moduleId:moduleId,date:today(),shift:"",responsible:"",objective:objectiveFor(moduleById(moduleId).name),sender:"Técnicos de Segurança e Risco",recipient:"Luis Sequeira de Figueiredo",department:"STSCT",data:{},updatedAt:new Date().toISOString()}}
+function loadStore(){try{const raw=localStorage.getItem(STORAGE_KEY);if(raw)store=Object.assign({drafts:{},reports:[]},JSON.parse(raw))}catch(e){store={drafts:{},reports:[]}}}
+function persist(){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(store))}catch(e){toast("Não foi possível guardar os dados neste navegador.")}}
+function moduleById(id){return modules.find(m=>m.id===id)||modules[0]}
+function esc(value){return String(value==null?"":value).replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]))}
+function keyFor(sec,f){return sec.id+"__"+f.id}
+function renderModules(){document.getElementById("moduleList").innerHTML=activeModules.map((m,i)=>'<button type="button" class="module-button '+(m.id===selectedModule?"active":"")+'" data-module="'+m.id+'"><span class="module-number">'+String(i+1).padStart(2,"0")+'</span><span>'+esc(m.name)+'</span></button>').join("")}
+function renderControl(def,value,key,row,column){
+ const type=column?column.type:(def.inputType||(def.kind==="textarea"?"textarea":"text")),label=column?column.label:def.label;
+ const attrs=column?' data-record-key="'+esc(key)+'" data-row="'+row+'" data-col="'+esc(column.id)+'"':' data-field-key="'+esc(key)+'"';
+ const labelMarkup=label?'<label>'+esc(label)+'</label>':'';
+ const isEventRecord=key==="occurrences__occurrences_list"||key==="incidents__incidents_list",isActionRecord=key==="actions__actions_list"||key==="actions__incident_actions",eventFieldClass=isEventRecord&&column?(column.id==="when"?" event-time-field":column.id==="where"?" event-location-field":""):"",startTimeFieldClass=key==="start__distribution"&&column&&column.id==="time"?" start-time-field":"",startObservationFieldClass=key==="start__distribution"&&column&&column.id==="notes"?" start-observations-field":"",actionFieldClass=isActionRecord&&column?(column.id==="case_type"?" action-type-field":column.id==="case_ref"||column.id==="incident_ref"?" action-reference-field":column.id==="responsible"?" action-responsible-field":column.id==="action"||column.id==="resolution"?" action-textarea-field":""):"",fieldClass=eventFieldClass+startTimeFieldClass+startObservationFieldClass+actionFieldClass,actionFieldWidth=isActionRecord&&column?(column.id==="case_ref"||column.id==="incident_ref"?"span3":column.id==="action"||column.id==="resolution"||column.id==="responsible"?"span4":""):"";
+ if(type==="select"){const opts=column?column.options:(def.options||[]);return'<div class="field'+(actionFieldWidth?' '+actionFieldWidth:'')+fieldClass+'">'+labelMarkup+'<select'+attrs+'><option value="">Seleccionar</option>'+opts.map(o=>'<option value="'+esc(o)+'" '+(value===o?"selected":"")+'>'+esc(o)+'</option>').join("")+'</select></div>'}
+ if(type==="textarea"){const autoResizeRecord=isEventRecord,autoResizeAction=isActionRecord;const fieldWidth=column?(autoResizeAction?"span4":autoResizeRecord?(column.id==="where"?"span3":"span4"):"span2"):"wide";const textareaClass=key==="summary__summary_text"?"summary-executive-textarea":autoResizeRecord||autoResizeAction?"record-textarea":"";return'<div class="field '+fieldWidth+fieldClass+'">'+labelMarkup+'<textarea'+attrs+(textareaClass?' class="'+textareaClass+'"':'')+' wrap="soft" placeholder="Escreva aqui...">'+esc(value||"")+'</textarea><div class="print-textarea-value"></div></div>'}
+ return'<div class="field'+(actionFieldWidth?' '+actionFieldWidth:'')+fieldClass+'">'+labelMarkup+'<input type="'+esc(type)+'"'+attrs+' value="'+esc(value||"")+'"></div>'
+}
+function renderField(def,sec){
+ const key=keyFor(sec,def),value=current.data[key];
+ if(def.kind!=="records")return renderControl(def,value,key,null,null);
+ const list=Array.isArray(value)?value:[];
+ const body=list.length?list.map((row,index)=>'<div class="record-row"><div class="record-row-grid">'+def.columns.map(c=>renderControl(def,row[c.id],key,index,c)).join("")+'</div><div class="print-entry-list-value"></div><div class="record-row-footer"><button type="button" class="remove-row" data-remove-key="'+esc(key)+'" data-row="'+index+'">Remover registo</button></div></div>').join(""):'<div class="record-empty">Ainda não há registos. Use “Adicionar registo” para começar.</div>';
+ return'<div class="record-block" data-record-key="'+esc(key)+'"><div class="record-head"><strong>'+esc(def.label)+'</strong><button class="add-row" type="button" data-add-key="'+esc(key)+'">+ Adicionar registo</button></div>'+body+'</div>'
+}
+function renderSections(m){return m.sections.map((sec,i)=>'<section class="report-section" data-module-id="'+esc(m.id)+'" data-section-id="'+esc(sec.id)+'"><div class="section-title"><span class="section-index">'+String(i+1).padStart(2,"0")+'</span><h3>'+esc(sec.title)+'</h3></div><div class="section-content">'+sec.fields.map(f=>renderField(f,sec)).join("")+'</div></section>').join("")}
+function resizeSummaryTextarea(textarea){textarea.style.height="auto";textarea.style.height=Math.max(78,textarea.scrollHeight)+"px"}
+function resizeSummaryTextareas(){document.querySelectorAll(".summary-executive-textarea,.record-textarea").forEach(resizeSummaryTextarea)}
+function normalizeEventTimes(report){["occurrences__occurrences_list","incidents__incidents_list"].forEach(key=>{const rows=report&&report.data&&report.data[key];if(!Array.isArray(rows))return;rows.forEach(row=>{if(typeof row.when==="string"&&row.when.includes("T"))row.when=row.when.split("T")[1].slice(0,5)})})}
+function renderReport(){normalizeEventTimes(current);
+ const m=moduleById(selectedModule), objective=current.objective==null?objectiveFor(m.name):current.objective;
+ const sender=current.sender==null?"Técnicos de Segurança e Risco":current.sender;
+ const recipient=current.recipient==null?"Luis Sequeira de Figueiredo":current.recipient;
+ const department=current.department==null?"STSCT":current.department;
+ document.getElementById("moduleTitle").textContent=m.name;
+ document.getElementById("moduleDescription").textContent=m.description;
+ document.querySelector(".module-kicker").textContent=current&&current.id?"Relatório":"Novo relatório";
+ document.getElementById("saveStatus").textContent=current&&current.id?"Relatório guardado neste dispositivo":"Rascunho neste dispositivo";
+ document.getElementById("reportBody").innerHTML=
+ '<div class="metadata screen-metadata"><div class="section-label">Identificação do relatório</div><div class="meta-grid">'+
+ '<div class="field"><label>Data</label><input type="date" data-meta="date" value="'+esc(current.date||"")+'"></div>'+
+ '<div class="field"><label>Turno</label><select data-meta="shift"><option value="">Seleccionar</option>'+["Manhã","Tarde","Noite","Outro"].map(o=>'<option '+(current.shift===o?"selected":"")+'>'+o+'</option>').join("")+'</select></div>'+
+ '<div class="field"><label>Responsável pelo relatório</label><input type="text" data-meta="responsible" value="'+esc(current.responsible||"")+'" placeholder="Nome do responsável"></div>'+
+ '<div class="field wide"><label>Objectivo</label><textarea data-meta="objective">'+esc(objective)+'</textarea></div>'+
+ '<div class="field"><label>De</label><input type="text" data-meta="sender" value="'+esc(sender)+'"></div>'+
+ '<div class="field"><label>Para</label><input type="text" data-meta="recipient" value="'+esc(recipient)+'"></div>'+
+ '<div class="field"><label>Zona</label><input type="text" data-meta="department" value="'+esc(department)+'"></div>'+ 
+ '</div></div>'+
+ '<table class="print-metadata"><tbody>'+
+ '<tr><th>Objectivo:</th><td>'+esc(objective)+'</td></tr>'+
+ '<tr><th>De:</th><td>'+esc(sender)+'</td></tr>'+
+ '<tr><th>Para:</th><td>'+esc(recipient)+'</td></tr>'+
+ '<tr><th>Data</th><td>'+esc(prettyDate(current.date||""))+'</td></tr>'+
+ '<tr><th>Zona:</th><td class="zone-field-value">'+esc(department)+'</td></tr>'+ 
+ '</tbody></table>'+
+ renderSections(m)
+}
+function prettyDate(value){if(!value)return"Sem data";const p=value.split("-");return p.length===3?p[2]+"/"+p[1]+"/"+p[0]:value}
+function renderHistory(){
+ const list=document.getElementById("historyList"),sorted=store.reports.slice().sort((a,b)=>(b.updatedAt||"").localeCompare(a.updatedAt||""));
+ document.getElementById("historyCount").textContent=String(sorted.length);
+ if(!sorted.length){list.innerHTML='<div class="history-empty">Os relatórios guardados aparecerão aqui.</div>';return}
+ list.innerHTML=sorted.map(r=>'<div class="history-item"><div class="history-title">'+esc(moduleById(r.moduleId).name)+'</div><div class="history-meta">'+esc(prettyDate(r.date))+' · '+esc(r.shift||"Turno não indicado")+'</div><div class="history-actions"><button type="button" data-open="'+esc(r.id)+'">Abrir</button><button type="button" class="delete" data-delete="'+esc(r.id)+'">Apagar</button></div></div>').join("")
+}
+function render(){renderModules();renderReport();renderHistory();resizeSummaryTextareas()}
+function saveDraft(){current.updatedAt=new Date().toISOString();store.drafts[selectedModule]=current;persist();document.getElementById("saveStatus").textContent=current.id?"Relatório guardado neste dispositivo":"Rascunho guardado neste dispositivo"}
+let toastTimer;
+function toast(message){const el=document.getElementById("toast");el.textContent=message;el.classList.add("show");clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove("show"),2300)}
+function updateField(target){
+ if(target.dataset.meta){current[target.dataset.meta]=target.value;saveDraft();return}
+ if(target.dataset.fieldKey){current.data[target.dataset.fieldKey]=target.value;saveDraft();return}
+ if(target.dataset.recordKey){const key=target.dataset.recordKey,row=Number(target.dataset.row),id=target.dataset.col,arr=Array.isArray(current.data[key])?current.data[key]:[];arr[row]=arr[row]||{};arr[row][id]=target.value;current.data[key]=arr;saveDraft()}
+}
+document.getElementById("moduleList").addEventListener("click",event=>{const b=event.target.closest("[data-module]");if(!b)return;saveDraft();selectedModule=b.dataset.module;current=store.drafts[selectedModule]||freshReport(selectedModule);render()});
+document.getElementById("reportBody").addEventListener("input",event=>{if(event.target.matches(".summary-executive-textarea,.record-textarea"))resizeSummaryTextarea(event.target);updateField(event.target)});
+window.addEventListener("resize",resizeSummaryTextareas);
+document.getElementById("reportBody").addEventListener("change",event=>updateField(event.target));
+document.getElementById("reportBody").addEventListener("click",event=>{
+ const add=event.target.closest("[data-add-key]");if(add){const key=add.dataset.addKey,list=Array.isArray(current.data[key])?current.data[key]:[];list.push({});current.data[key]=list;saveDraft();renderReport();return}
+ const remove=event.target.closest("[data-remove-key]");if(remove){const key=remove.dataset.removeKey,list=Array.isArray(current.data[key])?current.data[key]:[];list.splice(Number(remove.dataset.row),1);current.data[key]=list;saveDraft();renderReport()}
+});
+document.getElementById("historyList").addEventListener("click",event=>{
+ const open=event.target.closest("[data-open]");if(open){const report=store.reports.find(r=>r.id===open.dataset.open);if(report){selectedModule=report.moduleId;current=JSON.parse(JSON.stringify(report));render()}return}
+ const del=event.target.closest("[data-delete]");if(del){if(!confirm("Apagar este relatório guardado?"))return;store.reports=store.reports.filter(r=>r.id!==del.dataset.delete);persist();renderHistory();toast("Relatório apagado.")}
+});
+document.getElementById("saveButton").addEventListener("click",()=>{
+ current.updatedAt=new Date().toISOString();if(!current.id)current.id="r-"+Date.now()+"-"+Math.random().toString(36).slice(2,7);
+ const i=store.reports.findIndex(r=>r.id===current.id);if(i>=0)store.reports[i]=JSON.parse(JSON.stringify(current));else store.reports.unshift(JSON.parse(JSON.stringify(current)));
+ store.drafts[selectedModule]=current;persist();render();toast("Relatório guardado neste dispositivo.")
+});
+function syncPrintTextareaValues(){document.querySelectorAll("#reportBody textarea").forEach(textarea=>{const preview=textarea.nextElementSibling;if(preview&&preview.classList.contains("print-textarea-value")){preview.textContent=textarea.value||"";if(textarea.dataset.fieldKey==="summary__summary_text")preview.classList.add("print-summary-value")}})}
+function formatEntryTime(value){const match=/^(\d{1,2}):(\d{2})$/.exec(value||"");if(!match)return value;const hour=Number(match[1]);if(hour>23)return value;return String(hour%12||12).padStart(2,"0")+":"+match[2]+" "+(hour<12?"AM":"PM")}
+function syncPrintEntryLists(){["daily__people_entry","daily__personnel_entry"].forEach(key=>{document.querySelectorAll('.record-block[data-record-key="'+key+'"] .record-row').forEach(row=>{const values=Array.from(row.querySelectorAll(".record-row-grid input,.record-row-grid select,.record-row-grid textarea")).map(control=>{const value=control.value.trim();return control.type==="time"?formatEntryTime(value):value}).filter(Boolean);const preview=row.querySelector(".print-entry-list-value");if(!preview)return;preview.textContent=values.join(" | ");row.dataset.printEmpty=values.length?"false":"true"})});document.querySelectorAll('.report-section[data-module-id="cctv"][data-section-id="start"] .record-block[data-record-key="start__distribution"] .record-row').forEach(row=>{const values=Array.from(row.querySelectorAll(".record-row-grid input,.record-row-grid select,.record-row-grid textarea")).map(control=>control.value.trim()).filter(Boolean);const preview=row.querySelector(".print-entry-list-value");if(!preview)return;preview.textContent=values.join(" | ");row.dataset.printEmpty=values.length?"false":"true"})}
+function syncPrintValues(){syncPrintTextareaValues();syncPrintEntryLists()}
+window.addEventListener("beforeprint",syncPrintValues);
+document.getElementById("printButton").addEventListener("click",()=>{syncPrintValues();window.print()});
+document.getElementById("newButton").addEventListener("click",()=>{if(!activeModules.some(m=>m.id===selectedModule)){toast("O módulo "+moduleById(selectedModule).name+" foi removido. Consulte os relatórios anteriores no histórico.");return}if(!confirm("Iniciar um novo relatório para este módulo? O rascunho actual continuará guardado."))return;current=freshReport(selectedModule);store.drafts[selectedModule]=current;persist();render();toast("Novo relatório iniciado.")});
+loadStore();current=store.drafts[selectedModule]||freshReport(selectedModule);render();
+})();
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
